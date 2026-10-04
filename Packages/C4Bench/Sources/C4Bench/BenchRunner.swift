@@ -43,6 +43,11 @@ public struct BenchConfiguration: Sendable {
   public var gamesPerPair: Int
   /// Round-robin pairs are only played when both models fit together under this size.
   public var roundRobinLimitGB: Double
+  /// Anchors that play each other so the scale does not depend on LLM games alone.
+  public var calibrationAnchors: [Contestant]
+  /// Games per anchor pair in the calibration round robin. 0 turns it off. Engines only, so
+  /// it is fast, and like every game it is played once and then reused from disk.
+  public var calibrationGamesPerPair: Int
 
   public init(
     preset: SuitePreset, contestants: [Contestant], puzzles: [Puzzle] = BenchPuzzles.bundled(),
@@ -57,6 +62,8 @@ public struct BenchConfiguration: Sendable {
     self.gamesPerAnchor = Self.defaultGamesPerAnchor(for: preset)
     self.gamesPerPair = 14
     self.roundRobinLimitGB = 6
+    self.calibrationAnchors = Contestant.anchors
+    self.calibrationGamesPerPair = 14
   }
 
   public static func defaultAnchors(for preset: SuitePreset) -> [Contestant] {
@@ -216,7 +223,7 @@ private final class BenchSession {
       return PlannedGame(
         first: first, second: second, opening: opening, index: index,
         seed: BenchSeeds.gameSeed(
-          preset: config.preset, first: first, second: second, opening: opening, gameIndex: index),
+          first: first, second: second, opening: opening, gameIndex: index),
         preset: config.preset)
     }
   }
@@ -234,12 +241,23 @@ private final class BenchSession {
     var games: [PlannedGame] = []
     var anchorGames: [String: [PlannedGame]] = [:]
     var pairGames: [(a: Contestant, b: Contestant, games: [PlannedGame])] = []
+    var calibrationGames: [PlannedGame] = []
     var notes: [String] = []
   }
 
   func plan() -> Plan {
     var plan = Plan()
     guard config.includeGames else { return plan }
+    let anchors = config.calibrationAnchors
+    if config.calibrationGamesPerPair > 0 {
+      for i in anchors.indices {
+        for j in anchors.indices where j > i {
+          plan.calibrationGames += games(
+            anchors[i], anchors[j], count: config.calibrationGamesPerPair)
+        }
+      }
+      plan.games += plan.calibrationGames
+    }
     for contestant in llmContestants {
       let list = config.anchors.flatMap { games(contestant, $0, count: config.gamesPerAnchor) }
       plan.anchorGames[contestant.id] = list
@@ -298,6 +316,11 @@ private final class BenchSession {
         representative[id] = contestant
       }
       byModel[id, default: []].append(contestant)
+    }
+
+    // Anchor calibration first: engines only, nothing to load.
+    for game in plan.calibrationGames where !finishedSeeds.contains(game.seed) {
+      try await play(game)
     }
 
     for modelID in order {

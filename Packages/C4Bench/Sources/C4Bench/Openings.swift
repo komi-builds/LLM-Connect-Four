@@ -45,15 +45,19 @@ public enum Openings {
   }
 }
 
-/// Deterministic game seeds: `hash(opening, colour, preset, contestant ids, game index)`.
+/// Deterministic game seeds: `hash(opening, colour, contestant ids, game index)`.
+///
+/// The preset is deliberately not part of the key: Quick's games are the first games of the
+/// same pairing in Standard, so a Standard run after a Quick run reuses them instead of
+/// replaying (and double counting) identical games.
 public enum BenchSeeds {
   public static func gameSeed(
-    preset: SuitePreset, first: Contestant, second: Contestant, opening: [Column], gameIndex: Int
+    first: Contestant, second: Contestant, opening: [Column], gameIndex: Int
   ) -> UInt64 {
     // The colours are implied by the order of `first` and `second`, and are spelled out so
     // that the key reads clearly in a debugger.
     let key = [
-      preset.rawValue, "first=" + first.id, "second=" + second.id,
+      "first=" + first.id, "second=" + second.id,
       "opening=" + opening.map(String.init).joined(separator: ","), "index=\(gameIndex)",
     ].joined(separator: ";")
     return StableHash.hash(key)

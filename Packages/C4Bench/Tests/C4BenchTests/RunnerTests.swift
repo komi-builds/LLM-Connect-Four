@@ -37,6 +37,7 @@ private func tinyConfiguration(
   config.anchors = [.random, .minimax(1)]
   config.gamesPerAnchor = 4
   config.gamesPerPair = 2
+  config.calibrationGamesPerPair = 0
   return config
 }
 
@@ -58,29 +59,53 @@ private func tinyConfiguration(
 
   @Test func seedsAreDeterministicAndDistinct() {
     let c = mockContestant()
-    let a = BenchSeeds.gameSeed(
-      preset: .quick, first: c, second: .random, opening: [3, 3], gameIndex: 0)
-    let b = BenchSeeds.gameSeed(
-      preset: .quick, first: c, second: .random, opening: [3, 3], gameIndex: 0)
+    let a = BenchSeeds.gameSeed(first: c, second: .random, opening: [3, 3], gameIndex: 0)
+    let b = BenchSeeds.gameSeed(first: c, second: .random, opening: [3, 3], gameIndex: 0)
     #expect(a == b)
     #expect(
       a
         != BenchSeeds.gameSeed(
-          preset: .standard, first: c, second: .random, opening: [3, 3], gameIndex: 0))
+          first: .random, second: c, opening: [3, 3], gameIndex: 0))
     #expect(
       a
         != BenchSeeds.gameSeed(
-          preset: .quick, first: .random, second: c, opening: [3, 3], gameIndex: 0))
-    #expect(
-      a
-        != BenchSeeds.gameSeed(
-          preset: .quick, first: c, second: .random, opening: [3, 3], gameIndex: 1))
+          first: c, second: .random, opening: [3, 3], gameIndex: 1))
     // A fixed value, so a change to the hashing is noticed (it would orphan saved games).
     #expect(StableHash.hash("c4") == StableHash.hash("c4"))
   }
 }
 
 @Suite struct RunnerTests {
+  @Test func anchorCalibrationPlaysEveryAnchorPairOnce() async throws {
+    let store = tempStore()
+    defer { try? FileManager.default.removeItem(at: store.directory) }
+    var config = tinyConfiguration()
+    config.calibrationAnchors = [.random, .minimax(1), .minimax(2)]
+    config.calibrationGamesPerPair = 2
+    let runner = BenchRunner(configuration: config, store: store, providers: mockFactory())
+    // 3 anchor pairs x 2 games, plus 8 contestant games.
+    #expect(runner.plannedGames().count == 14)
+    _ = try await runner.run()
+    let anchorOnly = store.loadGames().filter { $0.first.isAnchor && $0.second.isAnchor }
+    #expect(anchorOnly.count == 6)
+    #expect(anchorOnly.allSatisfy { $0.traces.allSatisfy { $0.modelID == nil } })
+  }
+
+  @Test func quickGamesAreReusedByStandard() {
+    var quick = tinyConfiguration(preset: .quick)
+    quick.gamesPerAnchor = 2
+    var standard = tinyConfiguration(preset: .standard)
+    standard.gamesPerAnchor = 4
+    let store = tempStore()
+    let quickSeeds = Set(
+      BenchRunner(configuration: quick, store: store, providers: mockFactory()).plannedGames()
+        .map(\.seed))
+    let standardSeeds = Set(
+      BenchRunner(configuration: standard, store: store, providers: mockFactory()).plannedGames()
+        .map(\.seed))
+    #expect(quickSeeds.isSubset(of: standardSeeds))
+  }
+
   @Test func tinyRunSavesGamesAndPuzzlesThenResumes() async throws {
     let store = tempStore()
     defer { try? FileManager.default.removeItem(at: store.directory) }
