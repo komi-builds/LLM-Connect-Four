@@ -1,0 +1,1 @@
+First give one short sentence of reasoning (at most 25 words), then finish with a line "Column: N".

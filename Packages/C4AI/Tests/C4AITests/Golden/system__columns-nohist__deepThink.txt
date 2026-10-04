@@ -4,7 +4,7 @@ A disc dropped in a column lands on the lowest empty row. Four in a row
 horizontally, vertically or diagonally wins.
 Priorities: 1) win now  2) block the opponent's win  3) do not give the
 opponent a winning square  4) build threats, prefer the centre columns.
-Think the position through first. Then write one short sentence and finish with a line "Column: N".
+Think the position through first. Then write one short sentence (at most 25 words) and finish with a line "Column: N".
 
 Example 1
 Columns (bottom → top):

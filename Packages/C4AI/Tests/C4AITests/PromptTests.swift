@@ -248,7 +248,7 @@ private func golden(_ name: String, actual: String) throws -> String? {
   }
 
   @Test func versionAndPrefix() {
-    #expect(PromptBuilder.version == 1)
+    #expect(PromptBuilder.version == 2)
     #expect(PromptBuilder.answerPrefix == "Column: ")
     for style in ThinkingStyle.allCases {
       let s = PromptBuilder.systemPrompt(variant: .default, style: style)

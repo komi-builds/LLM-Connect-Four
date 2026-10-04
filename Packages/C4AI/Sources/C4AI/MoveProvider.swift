@@ -20,6 +20,14 @@ public protocol LoadableMoveProvider: MoveProvider {
     func load(progress: @escaping @Sendable (LoadProgress) -> Void) async throws
     func unload() async
     var isReady: Bool { get async }
+    /// Warms the static prefix for `context`'s style and variant, so the first move after a
+    /// style change doesn't pay for it. Call after `load` and whenever style or variant
+    /// change. The default does nothing.
+    func prepare(for context: TurnContext) async throws
+}
+
+extension LoadableMoveProvider {
+    public func prepare(for context: TurnContext) async throws {}
 }
 
 /// Load progress, shown as the "Warming up… 63%" pill.

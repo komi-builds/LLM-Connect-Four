@@ -81,7 +81,7 @@ public struct Prompt: Sendable, Hashable, Codable {
 /// `turn.txt` (with `{{board}}` and `{{lines}}`). The system prefix never depends on the board.
 public enum PromptBuilder {
   /// Bump whenever any template or encoding changes. Recorded in every trace.
-  public static let version = 1
+  public static let version = 2
 
   /// The text the app appends to force the answer. The digit token follows directly.
   public static let answerPrefix = "Column: "

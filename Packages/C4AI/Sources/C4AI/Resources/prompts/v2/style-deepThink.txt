@@ -1,0 +1,1 @@
+Think the position through first. Then write one short sentence (at most 25 words) and finish with a line "Column: N".
