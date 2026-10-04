@@ -1,0 +1,39 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Facts:
+- You can win immediately in column 1.
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Facts:
+- You can win immediately in column 1.
+Legal columns: 1 2 3 4 5 6 7

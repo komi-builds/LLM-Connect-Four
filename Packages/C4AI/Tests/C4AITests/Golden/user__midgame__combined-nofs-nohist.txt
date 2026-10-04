@@ -1,0 +1,66 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Columns (bottom → top):
+1: empty → lands row 1
+2: empty → lands row 1
+3: X O X → lands row 4
+4: X O X X → lands row 5
+5: O O X → lands row 4
+6: empty → lands row 1
+7: O → lands row 2
+
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Columns (bottom → top):
+1: empty → lands row 1
+2: empty → lands row 1
+3: X O X → lands row 4
+4: X O X X → lands row 5
+5: O O X → lands row 4
+6: empty → lands row 1
+7: O → lands row 2
+
+Facts: none
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Columns (bottom → top):
+1: empty → lands row 1
+2: empty → lands row 1
+3: X O X → lands row 4
+4: X O X X → lands row 5
+5: O O X → lands row 4
+6: empty → lands row 1
+7: O → lands row 2
+
+Facts:
+- Column 2 would create a new winning threat for you.
+- Column 6 would create a new winning threat for you.
+Legal columns: 1 2 3 4 5 6 7

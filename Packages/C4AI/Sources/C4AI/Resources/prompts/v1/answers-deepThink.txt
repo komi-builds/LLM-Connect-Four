@@ -1,0 +1,5 @@
+X threatens to win in column 4 and I cannot win first, so I block.
+Column: 4
+---
+Column 1 completes four in a row for me, so I win now.
+Column: 1

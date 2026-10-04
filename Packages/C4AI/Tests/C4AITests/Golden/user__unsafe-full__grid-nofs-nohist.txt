@@ -1,0 +1,40 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . O
+5  O . . . . . X
+4  X . . . X . X
+3  O . X . O . X
+2  O X O X O X O
+1  X O X X O O O
+
+Legal columns: 1 2 3 4 5 6
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . O
+5  O . . . . . X
+4  X . . . X . X
+3  O . X . O . X
+2  O X O X O X O
+1  X O X X O O O
+
+Facts: none
+Legal columns: 1 2 3 4 5 6
+
+=== hard (allowed: [1, 2, 3, 5, 6]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . O
+5  O . . . . . X
+4  X . . . X . X
+3  O . X . O . X
+2  O X O X O X O
+1  X O X X O O O
+
+Facts:
+- Playing column 4 lets X win immediately.
+- Column 3 would create a new winning threat for you.
+- Column 4 would create a new winning threat for you.
+Legal columns: 1 2 3 5 6

@@ -1,0 +1,5 @@
+X has three in a row in column 4 and threatens to win there, so I must block.
+Column: 4
+---
+I can win immediately in column 1.
+Column: 1
