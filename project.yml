@@ -1,0 +1,116 @@
+name: LLMConnectFour
+
+options:
+  bundleIdPrefix: com.komi
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    ARCHS: arm64
+    ONLY_ACTIVE_ARCH: YES
+    MACOSX_DEPLOYMENT_TARGET: "26.0"
+    CODE_SIGN_IDENTITY: "-"
+    CODE_SIGN_STYLE: Manual
+    DEVELOPMENT_TEAM: ""
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+
+packages:
+  C4Core:
+    path: Packages/C4Core
+  C4AI:
+    path: Packages/C4AI
+  C4MLX:
+    path: Packages/C4MLX
+  C4Bench:
+    path: Packages/C4Bench
+
+targets:
+  LLMConnectFour:
+    type: application
+    platform: macOS
+    sources:
+      - path: App
+      - path: Resources
+        excludes:
+          - "schemas/**"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.komi.LLMConnectFour
+        PRODUCT_NAME: LLMConnectFour
+        INFOPLIST_KEY_CFBundleDisplayName: LLM Connect Four
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.board-games
+        INFOPLIST_KEY_NSHumanReadableCopyright: "© 2026 komi. MIT License."
+        GENERATE_INFOPLIST_FILE: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_ENTITLEMENTS: App/LLMConnectFour.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        SWIFT_EMIT_LOC_STRINGS: YES
+    dependencies:
+      - package: C4Core
+      - package: C4AI
+      - package: C4MLX
+      - package: C4Bench
+
+  LLMConnectFourTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Tests/AppTests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.komi.LLMConnectFourTests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/LLMConnectFour.app/Contents/MacOS/LLMConnectFour"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+    dependencies:
+      - target: LLMConnectFour
+      - package: C4Core
+      - package: C4AI
+
+  c4bench:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Tools/c4bench
+    settings:
+      base:
+        PRODUCT_NAME: c4bench
+        # Distinct from the C4Bench library on a case-insensitive file system.
+        PRODUCT_MODULE_NAME: C4BenchCLI
+        PRODUCT_BUNDLE_IDENTIFIER: com.komi.c4bench
+    dependencies:
+      - package: C4Core
+      - package: C4AI
+      - package: C4MLX
+      - package: C4Bench
+
+schemes:
+  LLMConnectFour:
+    build:
+      targets:
+        LLMConnectFour: all
+        c4bench: [run, test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - LLMConnectFourTests
+        - package: C4Core/C4CoreTests
+        - package: C4AI/C4AITests
+        - package: C4Bench/C4BenchTests
+        - package: C4MLX/C4MLXTests
+  c4bench:
+    build:
+      targets:
+        c4bench: all
+    run:
+      config: Release

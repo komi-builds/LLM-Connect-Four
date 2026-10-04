@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "puzzles.json",
+  "description": "Bench puzzles. Lives at Packages/C4Bench/Sources/C4Bench/Resources/puzzles.json. Generated once with a fixed seed by C4Core.PuzzleGenerator and committed. Decoded by C4Core.Puzzle.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "category", "moves", "solutions"],
+    "additionalProperties": false,
+    "properties": {
+      "id": { "type": "string", "pattern": "^(win-in-1|block-in-1|avoid-the-blunder|win-in-3)-[0-9]{3}$" },
+      "category": { "enum": ["win-in-1", "block-in-1", "avoid-the-blunder", "win-in-3"] },
+      "moves": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 6 }, "description": "0-based moves from the empty board; the side to move solves" },
+      "solutions": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 6 }, "minItems": 1, "description": "Every correct 0-based column, ascending" }
+    }
+  }
+}

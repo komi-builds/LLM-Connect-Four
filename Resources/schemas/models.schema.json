@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "models.json",
+  "description": "Models offered in the app and the bench. Lives at Packages/C4AI/Sources/C4AI/Resources/models.json. Decoded by C4AI.ModelSpec.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "sizeGB", "thinking"],
+    "additionalProperties": false,
+    "properties": {
+      "id": { "type": "string", "description": "Hugging Face repo id, e.g. mlx-community/Qwen3-4B-Instruct-2507-4bit" },
+      "name": { "type": "string", "description": "Display name" },
+      "default": { "type": "boolean", "description": "The default model (exactly one entry)" },
+      "sizeGB": { "type": "number", "minimum": 0 },
+      "thinking": { "type": "boolean", "description": "Supports native thinking; enables Deep think" },
+      "thinkTags": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 },
+      "chatTemplateArgs": {
+        "type": "object",
+        "description": "Extra chat-template arguments. The value \"$deepThink\" becomes true in Deep think, false otherwise.",
+        "additionalProperties": { "type": "string" }
+      },
+      "notes": { "type": "string" }
+    }
+  }
+}

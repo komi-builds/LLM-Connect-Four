@@ -1,0 +1,16 @@
+[
+  { "id": "mlx-community/Qwen3-4B-Instruct-2507-4bit", "name": "Qwen3 4B Instruct",
+    "default": true, "sizeGB": 2.3, "thinking": false },
+  { "id": "mlx-community/Qwen3-4B-Thinking-2507-4bit", "name": "Qwen3 4B Thinking",
+    "sizeGB": 2.3, "thinking": true, "thinkTags": ["<think>", "</think>"] },
+  { "id": "mlx-community/Qwen3-1.7B-4bit", "name": "Qwen3 1.7B", "sizeGB": 1.0,
+    "thinking": true, "thinkTags": ["<think>", "</think>"],
+    "chatTemplateArgs": { "enable_thinking": "$deepThink" } },
+  { "id": "mlx-community/Qwen3-8B-4bit", "name": "Qwen3 8B", "sizeGB": 4.6, "thinking": true,
+    "thinkTags": ["<think>", "</think>"], "chatTemplateArgs": { "enable_thinking": "$deepThink" } },
+  { "id": "mlx-community/gemma-3-4b-it-4bit", "name": "Gemma 3 4B", "sizeGB": 3.4, "thinking": false,
+    "notes": "loads text-only; vision weights still downloaded" },
+  { "id": "mlx-community/Llama-3.2-3B-Instruct-4bit", "name": "Llama 3.2 3B", "sizeGB": 1.8, "thinking": false },
+  { "id": "mlx-community/Qwen3.5-4B-4bit", "name": "Qwen3.5 4B", "sizeGB": 3.1, "thinking": true,
+    "notes": "newer; benchmark against Qwen3 4B" }
+]
