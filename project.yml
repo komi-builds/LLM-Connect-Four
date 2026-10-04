@@ -92,6 +92,22 @@ targets:
       - package: C4MLX
       - package: C4Bench
 
+  mlx-smoke:
+    type: tool
+    platform: macOS
+    sources:
+      - path: Tools/mlx-smoke
+    settings:
+      base:
+        PRODUCT_NAME: mlx-smoke
+        # Distinct from every library module name.
+        PRODUCT_MODULE_NAME: MLXSmoke
+        PRODUCT_BUNDLE_IDENTIFIER: com.komi.mlx-smoke
+    dependencies:
+      - package: C4Core
+      - package: C4AI
+      - package: C4MLX
+
 schemes:
   LLMConnectFour:
     build:
@@ -112,5 +128,11 @@ schemes:
     build:
       targets:
         c4bench: all
+    run:
+      config: Release
+  mlx-smoke:
+    build:
+      targets:
+        mlx-smoke: all
     run:
       config: Release
