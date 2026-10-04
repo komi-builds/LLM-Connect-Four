@@ -1,0 +1,7 @@
+rank,tied_with_previous,contestant_id,contestant,rating,ci_low,ci_high,games,wins,draws,losses,puzzle_win_in_1,puzzle_block_in_1,puzzle_avoid_the_blunder,puzzle_win_in_3,puzzle_overall,win_rate_vs_d4,blunders_per_game,would_be_illegal_rate,median_move_ms,tokens_per_second,load_time_ms,peak_ram_gb,size_gb
+1,false,minimax-d6,Minimax d6,1412.3400,1380.2000,1445.9000,50,44,3,3,,,,,,0.7300,0.0200,,38.0000,,,,
+2,false,llm|mlx-community/Qwen3-4B-Instruct-2507-4bit|explain|hard|combined,Qwen3 4B · Explain · Hard · combined,1123.4500,1082.6000,1163.8000,50,20,5,25,1.0000,0.9000,0.6250,0.4000,0.7125,0.2600,0.8400,0.0310,1234.5000,61.2500,4200.0000,3.4000,2.3000
+3,true,minimax-d4,Minimax d4,1101.1000,1070.0000,1132.2000,80,40,10,30,,,,,,,0.1000,,12.0000,,,,
+4,true,llm|m/odd|instinct|easy|grid,"Odd, ""Quoted"" | Model · Instinct · Easy · grid",1000.0000,1000.0000,1000.0000,14,5,4,5,0.5000,,,,0.5000,,1.5000,0.2000,250.0000,0.0000,800.0000,1.2500,1.1000
+5,false,llm|m/gemma|instinct|moderate|columns,Gemma 2B · Instinct · Moderate · columns,802.5000,760.1000,850.0000,14,1,0,13,,,,,,,,0.5500,,,,,
+6,false,random,Random,450.0000,380.0000,520.0000,28,0,0,28,,,,,,,3.2500,,,,,,

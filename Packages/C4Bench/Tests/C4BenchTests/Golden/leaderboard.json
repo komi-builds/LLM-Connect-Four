@@ -1,0 +1,167 @@
+[
+  {
+    "blundersPerGame" : 0.02,
+    "ciHigh" : 1445.9,
+    "ciLow" : 1380.2,
+    "contestant" : {
+      "kind" : {
+        "minimax" : {
+          "depth" : 6
+        }
+      }
+    },
+    "draws" : 3,
+    "games" : 50,
+    "losses" : 3,
+    "medianMoveMs" : 38,
+    "puzzleAccuracy" : {
+
+    },
+    "rank" : 1,
+    "rating" : 1412.34,
+    "tiedWithPrevious" : false,
+    "winRateVsD4" : 0.73,
+    "wins" : 44
+  },
+  {
+    "blundersPerGame" : 0.84,
+    "ciHigh" : 1163.8,
+    "ciLow" : 1082.6,
+    "contestant" : {
+      "kind" : {
+        "llm" : {
+          "difficulty" : "hard",
+          "modelID" : "mlx-community/Qwen3-4B-Instruct-2507-4bit",
+          "style" : "explain",
+          "variantID" : "combined"
+        }
+      },
+      "modelName" : "Qwen3 4B"
+    },
+    "draws" : 5,
+    "games" : 50,
+    "loadTimeMs" : 4200,
+    "losses" : 25,
+    "medianMoveMs" : 1234.5,
+    "peakRAMGB" : 3.4,
+    "puzzleAccuracy" : {
+      "avoid-the-blunder" : 0.625,
+      "block-in-1" : 0.9,
+      "win-in-1" : 1,
+      "win-in-3" : 0.4
+    },
+    "puzzleOverall" : 0.7125,
+    "rank" : 2,
+    "rating" : 1123.45,
+    "sizeGB" : 2.3,
+    "tiedWithPrevious" : false,
+    "tokensPerSecond" : 61.25,
+    "winRateVsD4" : 0.26,
+    "wins" : 20,
+    "wouldBeIllegalRate" : 0.031
+  },
+  {
+    "blundersPerGame" : 0.1,
+    "ciHigh" : 1132.2,
+    "ciLow" : 1070,
+    "contestant" : {
+      "kind" : {
+        "minimax" : {
+          "depth" : 4
+        }
+      }
+    },
+    "draws" : 10,
+    "games" : 80,
+    "losses" : 30,
+    "medianMoveMs" : 12,
+    "puzzleAccuracy" : {
+
+    },
+    "rank" : 3,
+    "rating" : 1101.1,
+    "tiedWithPrevious" : true,
+    "wins" : 40
+  },
+  {
+    "blundersPerGame" : 1.5,
+    "ciHigh" : 1000,
+    "ciLow" : 1000,
+    "contestant" : {
+      "kind" : {
+        "llm" : {
+          "difficulty" : "easy",
+          "modelID" : "m/odd",
+          "style" : "instinct",
+          "variantID" : "grid"
+        }
+      },
+      "modelName" : "Odd, \"Quoted\" | Model"
+    },
+    "draws" : 4,
+    "games" : 14,
+    "loadTimeMs" : 800,
+    "losses" : 5,
+    "medianMoveMs" : 250,
+    "peakRAMGB" : 1.25,
+    "puzzleAccuracy" : {
+      "win-in-1" : 0.5
+    },
+    "puzzleOverall" : 0.5,
+    "rank" : 4,
+    "rating" : 1000,
+    "sizeGB" : 1.1,
+    "tiedWithPrevious" : true,
+    "tokensPerSecond" : 0,
+    "wins" : 5,
+    "wouldBeIllegalRate" : 0.2
+  },
+  {
+    "ciHigh" : 850,
+    "ciLow" : 760.1,
+    "contestant" : {
+      "kind" : {
+        "llm" : {
+          "difficulty" : "moderate",
+          "modelID" : "m/gemma",
+          "style" : "instinct",
+          "variantID" : "columns"
+        }
+      },
+      "modelName" : "Gemma 2B"
+    },
+    "draws" : 0,
+    "games" : 14,
+    "losses" : 13,
+    "puzzleAccuracy" : {
+
+    },
+    "rank" : 5,
+    "rating" : 802.5,
+    "tiedWithPrevious" : false,
+    "wins" : 1,
+    "wouldBeIllegalRate" : 0.55
+  },
+  {
+    "blundersPerGame" : 3.25,
+    "ciHigh" : 520,
+    "ciLow" : 380,
+    "contestant" : {
+      "kind" : {
+        "random" : {
+
+        }
+      }
+    },
+    "draws" : 0,
+    "games" : 28,
+    "losses" : 28,
+    "puzzleAccuracy" : {
+
+    },
+    "rank" : 6,
+    "rating" : 450,
+    "tiedWithPrevious" : false,
+    "wins" : 0
+  }
+]
