@@ -7,6 +7,8 @@ struct ContentView: View {
   @Bindable var game: GameViewModel
 
   @FocusState private var boardFocused: Bool
+  @State private var replayRecord: GameRecord?
+  @State private var showRecentGames = false
 
   var body: some View {
     ZStack {
@@ -16,7 +18,7 @@ struct ContentView: View {
 
       VStack(spacing: DesignTokens.Spacing.l) {
         BoardView(game: game)
-        StatusArea(game: game)
+        StatusArea(game: game) { replayRecord = game.record }
           .frame(height: 76)
       }
       .padding(.horizontal, DesignTokens.Spacing.xl)
@@ -33,11 +35,27 @@ struct ContentView: View {
       game.humanDrop(digit - 1)
       return .handled
     }
-    .onAppear { boardFocused = true }
+    .onAppear {
+      boardFocused = true
+      #if DEBUG
+        switch UserDefaults.standard.string(forKey: "demoSheet") {
+        case "replay": replayRecord = DemoPositions.sampleRecord()
+        case "recent": showRecentGames = true
+        default: break
+        }
+      #endif
+    }
     .onChange(of: game.board.winner) { _, winner in
       if winner != nil { Feedback.gameWon() }
     }
-    .toolbar { GameToolbar(game: game) }
+    .toolbar { GameToolbar(game: game, showRecentGames: $showRecentGames) }
+    .focusedSceneValue(\.showRecentGames, $showRecentGames)
+    .sheet(item: $replayRecord) { record in
+      ReplayView(record: record)
+    }
+    .sheet(isPresented: $showRecentGames) {
+      RecentGamesView(store: game.gameStore ?? .default)
+    }
     .inspector(isPresented: $game.showThinking) {
       InspectorView(game: game)
         .inspectorColumnWidth(
@@ -54,6 +72,7 @@ struct ContentView: View {
 /// with groups separated by `ToolbarSpacer`. No custom pill container.
 struct GameToolbar: ToolbarContent {
   @Bindable var game: GameViewModel
+  @Binding var showRecentGames: Bool
   @Environment(\.openWindow) private var openWindow
 
   private var lockedHelp: LocalizedStringKey { "Change this between games" }
@@ -98,6 +117,8 @@ struct GameToolbar: ToolbarContent {
     ToolbarItemGroup {
       Button("Leaderboard", systemImage: "trophy") { openWindow(id: "leaderboard") }
         .help("Leaderboard (⌘L)")
+      Button("Recent Games", systemImage: "clock.arrow.circlepath") { showRecentGames = true }
+        .help("Recent games and replays (⌘Y)")
       Toggle("Show Thinking", systemImage: "brain.head.profile", isOn: $game.showThinking)
         .help("Show thinking (⌘T)")
     }
@@ -151,6 +172,7 @@ private struct ModelMenu: View {
 /// Below the board: whose turn it is, the warming-up pill, or the result card.
 private struct StatusArea: View {
   var game: GameViewModel
+  var onReplay: () -> Void
 
   var body: some View {
     ZStack {
@@ -169,7 +191,7 @@ private struct StatusArea: View {
       case .warmingUp:
         WarmingUpPill(progress: game.loadProgress)
       case .gameOver(let outcome):
-        ResultCard(game: game, outcome: outcome)
+        ResultCard(game: game, outcome: outcome, onReplay: onReplay)
       }
     }
     .frame(maxWidth: .infinity)
@@ -244,6 +266,7 @@ private struct LoadErrorBanner: View {
 private struct ResultCard: View {
   var game: GameViewModel
   var outcome: GameOutcome
+  var onReplay: () -> Void
 
   var body: some View {
     GlassEffectContainer(spacing: DesignTokens.Spacing.m) {
@@ -256,10 +279,9 @@ private struct ResultCard: View {
           }
         }
         HStack(spacing: DesignTokens.Spacing.s) {
-          Button("Replay", systemImage: "play.circle") {}
+          Button("Replay", systemImage: "play.circle", action: onReplay)
             .buttonStyle(.glass)
-            .disabled(true)
-            .help("Replay arrives with the Thinking views")
+            .help("Step through this game with the model's thinking")
           SwapModelMenu(game: game)
           Button("Rematch", systemImage: "arrow.counterclockwise") { game.newGame() }
             .buttonStyle(.glassProminent)
@@ -321,5 +343,19 @@ private struct SwapModelMenu: View {
     .menuIndicator(.hidden)
     .buttonStyle(.glass)
     .disabled(game.models.count < 2)
+  }
+}
+
+// MARK: Focused values
+
+private struct ShowRecentGamesKey: FocusedValueKey {
+  typealias Value = Binding<Bool>
+}
+
+extension FocusedValues {
+  /// Lets the Window menu open the Recent Games sheet of the frontmost game window.
+  var showRecentGames: Binding<Bool>? {
+    get { self[ShowRecentGamesKey.self] }
+    set { self[ShowRecentGamesKey.self] = newValue }
   }
 }

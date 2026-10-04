@@ -87,6 +87,7 @@ struct BoardView: View {
       VStack(spacing: metrics.ghostGap) {
         GhostRow(column: ghostColumn, metrics: metrics)
         ZStack(alignment: .topLeading) {
+          ConfidenceGlow(game: game, metrics: metrics)
           DiscLayer(game: game, metrics: metrics)
           BoardPlate(metrics: metrics)
           WinRings(game: game, metrics: metrics)
@@ -156,6 +157,55 @@ private struct GhostRow: View {
         .glassEffect(.clear.tint(DesignTokens.Colors.ghostTint), in: .circle)
         .glassEffectTransition(.materialize)
     }
+  }
+}
+
+// MARK: Glow
+
+/// While the model thinks, a soft cyan light in each column behind the plate, strongest for
+/// the columns it currently favours (§4). It shows through the empty holes and spills above
+/// the plate. Opacity follows the live distribution; it fades out when the AI disc drops.
+/// Part of the board, so it stays on whether or not the Thinking panel is shown; hidden
+/// under Increase Contrast, where the bars carry the information.
+struct ConfidenceGlow: View {
+  var game: GameViewModel
+  var metrics: BoardMetrics
+
+  @Environment(\.colorSchemeContrast) private var contrast
+
+  /// Opacity of a column's light for probability `p`.
+  static func opacity(for p: Double) -> Double {
+    DesignTokens.Chart.glowPeak * pow(max(0, min(1, p)), DesignTokens.Chart.glowExponent)
+  }
+
+  var body: some View {
+    let turn = game.aiTurn
+    let active = turn?.isStreaming == true && !game.board.isGameOver && contrast != .increased
+    let probabilities =
+      turn?.distribution?.probabilities ?? Array(repeating: 0, count: Board.columnCount)
+    let top = metrics.cell + metrics.ghostGap
+    let height = top + metrics.plateSize.height
+    ZStack(alignment: .topLeading) {
+      ForEach(Board.allColumns, id: \.self) { column in
+        let op = Self.opacity(for: probabilities[column])
+        LinearGradient(
+          stops: [
+            .init(color: DesignTokens.Colors.ai.opacity(0), location: 0),
+            .init(color: DesignTokens.Colors.ai.opacity(op * 0.85), location: top / height),
+            .init(color: DesignTokens.Colors.ai.opacity(op), location: 1),
+          ], startPoint: .top, endPoint: .bottom
+        )
+        .frame(width: metrics.cell * 0.94, height: height)
+        .blur(radius: metrics.cell * 0.06)
+        .offset(x: metrics.padX + (CGFloat(column) + 0.03) * metrics.cell, y: -top)
+      }
+    }
+    .frame(width: metrics.plateSize.width, height: metrics.plateSize.height, alignment: .topLeading)
+    .opacity(active ? 1 : 0)
+    .animation(DesignTokens.Motion.glow, value: probabilities)
+    .animation(.easeOut(duration: 0.35), value: active)
+    .allowsHitTesting(false)
+    .accessibilityHidden(true)
   }
 }
 

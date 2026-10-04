@@ -90,6 +90,9 @@ final class GameViewModel {
   @ObservationIgnored private var loadTask: Task<Void, Never>?
   @ObservationIgnored private var turnToken = 0
   private(set) var isAITurnActive = false
+  /// Where finished games are saved. Nil (the default) saves nothing, so tests stay clean;
+  /// the app sets `GameStore.default`.
+  @ObservationIgnored var gameStore: GameStore?
 
   private enum Keys {
     static let difficulty = "difficulty"
@@ -205,6 +208,8 @@ final class GameViewModel {
   /// Cancels any AI turn and starts a fresh game with the current settings.
   func newGame() {
     cancelAITurn()
+    // An abandoned game is worth keeping once the model has played in it.
+    if record.outcome == nil, !record.traces.isEmpty { saveRecord() }
     board = Board()
     aiTurn = nil
     lastDropPly = nil
@@ -236,6 +241,14 @@ final class GameViewModel {
       gameLog.info(
         "game over after \(self.board.plyCount) plies: \(String(describing: outcome), privacy: .public)"
       )
+      saveRecord()
+    }
+  }
+
+  private func saveRecord() {
+    guard let gameStore else { return }
+    do { try gameStore.save(record) } catch {
+      gameLog.error("saving game failed: \(error.localizedDescription, privacy: .public)")
     }
   }
 
@@ -337,8 +350,9 @@ final class GameViewModel {
 
   #if DEBUG
     /// Sets up a finished position for screenshots and previews. Not a game action.
-    func setPosition(_ moves: [Column], aiTurn: AITurn?) {
+    func setPosition(_ moves: [Column], aiTurn: AITurn?, style: ThinkingStyle? = nil) {
       cancelAITurn()
+      if let style { record.style = style }
       board = (try? Board(moves: moves)) ?? Board()
       record.moves = board.moves
       record.outcome = board.outcome
