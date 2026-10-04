@@ -32,6 +32,16 @@ enum DesignTokens {
     /// Ghost disc glass tint.
     static let ghostTint = human.opacity(0.3)
 
+    /// Background behind the facts the prompt builder added (prompt inspector).
+    static let factHighlight = Color(
+      light: Color(hex: 0xFFC83D, opacity: 0.45), dark: Color(hex: 0xFFC83D, opacity: 0.30))
+    /// Fallback moves and warnings.
+    static let warning = Color.orange
+    /// Self-checked moves.
+    static let selfChecked = Color(light: Color(hex: 0x5B4FD6), dark: Color(hex: 0x9C94FF))
+    /// Bars and hatching in the confidence chart.
+    static let barIdle = Color.secondary.opacity(0.5)
+
     /// Mesh-gradient palettes, 3×3 points, row-major.
     static let meshLight: [Color] = [
       Color(hex: 0xFFD6C9), Color(hex: 0xFFE9B8), Color(hex: 0xC9F1F5),
@@ -86,6 +96,13 @@ enum DesignTokens {
     static let dimmedDiscOpacity: Double = 0.4
     /// Result card entrance.
     static let card = Animation.spring(duration: 0.45, bounce: 0.2)
+  }
+
+  enum Chart {
+    static let height: CGFloat = 132
+    /// Probability curve for the board glow: opacity = peak * p^exponent.
+    static let glowPeak: Double = 1.0
+    static let glowExponent: Double = 0.6
   }
 
   enum Window {

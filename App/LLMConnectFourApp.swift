@@ -9,6 +9,7 @@ struct LLMConnectFourApp: App {
 
   init() {
     let game = GameViewModel()
+    game.gameStore = .default
     #if DEBUG
       DemoPositions.applyLaunchArguments(to: game)
     #endif
@@ -44,6 +45,7 @@ struct LLMConnectFourApp: App {
 struct GameCommands: Commands {
   @Bindable var game: GameViewModel
   @Environment(\.openWindow) private var openWindow
+  @FocusedBinding(\.showRecentGames) private var showRecentGames
 
   var body: some Commands {
     CommandGroup(replacing: .newItem) {
@@ -58,6 +60,9 @@ struct GameCommands: Commands {
     CommandGroup(before: .windowList) {
       Button("Leaderboard") { openWindow(id: "leaderboard") }
         .keyboardShortcut("l")
+      Button("Recent Games") { showRecentGames = true }
+        .keyboardShortcut("y")
+        .disabled(showRecentGames == nil)
       Divider()
     }
   }

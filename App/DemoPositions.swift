@@ -26,6 +26,7 @@
       switch UserDefaults.standard.string(forKey: "demoPosition") {
       case "midgame": show(midgame, in: game, reasoning: midgameReasoning)
       case "win": show(win, in: game, reasoning: winReasoning)
+      case "stream": showStreaming(in: game)
       default: break
       }
     }
@@ -60,6 +61,16 @@
         return
       }
       let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name)
+      capture(window, to: url)
+      // A sheet (replay, prompt inspector) is its own window: save it beside the main one.
+      for sheet in window.sheets + (window.sheets.compactMap { $0.sheets }.flatMap { $0 })
+      where sheet.isVisible {
+        let name = name.replacingOccurrences(of: ".png", with: "-sheet\(sheet.windowNumber).png")
+        capture(sheet, to: url.deletingLastPathComponent().appendingPathComponent(name))
+      }
+    }
+
+    private static func capture(_ window: NSWindow, to url: URL) {
       // The window server's own composite (glass included) of this app's window. The
       // symbol is unavailable to Swift in the current SDK, so look it up at run time.
       typealias CreateImage = @convention(c) (CGRect, UInt32, UInt32, UInt32) -> Unmanaged<CGImage>?
@@ -106,6 +117,64 @@
       turn.distribution = distribution
       turn.move = move
       game.setPosition(moves, aiTurn: turn)
+    }
+
+    /// Frozen mid-stream: Deep think on Hard, thoughts and half a sentence of reasoning
+    /// written, the distribution leaning toward column 4. The glow is lit.
+    private static func showStreaming(in game: GameViewModel) {
+      let moves = midgame + [0]
+      guard let board = try? Board(moves: moves) else { return }
+      let context = TurnContext(
+        board: board, style: .deepThink, profile: .profile(for: .hard), gameSeed: 7)
+      var turn = GameViewModel.AITurn(ply: moves.count)
+      turn.prompt = PromptBuilder.build(for: context)
+      turn.thinking =
+        "Okay, X just played column 1, which does nothing on the left edge. My three in a row on row 2 is blocked at both ends. Column 4 is open and lands on row 4. If I play column 4, X cannot reach row 5 above it without giving me something. Column 5 would let X play the diagonal. Let me check column 4 again: it keeps my diagonal alive."
+      turn.thinkingTokens = 61
+      turn.reasoning = "Column 4 keeps the centre and my diagonal, and X has no threat to answer"
+      turn.reasoningTokens = 17
+      let allowed = (turn.prompt?.allowedColumns ?? board.legalMoves).filter { $0 != 0 && $0 != 6 }
+      var logits = Board.allColumns.map { 0.9 - Double(abs($0 - 3)) * 0.45 }
+      logits[3] += 1.6
+      logits[4] += 0.5
+      turn.distribution = ColumnDistribution.softmax(logits: logits, allowed: allowed)
+      game.setPosition(moves, aiTurn: turn, style: .deepThink)
+    }
+
+    /// A full saved game with traces, for the replay and prompt inspector screenshots.
+    static func sampleRecord() -> GameRecord {
+      var record = GameRecord(
+        startedAt: Date().addingTimeInterval(-600), finishedAt: Date().addingTimeInterval(-540),
+        opponentName: "Qwen3 4B Thinking", modelID: "mlx-community/Qwen3-4B-Thinking-2507-4bit",
+        style: .deepThink, difficulty: .hard, variantID: PromptVariant.default.id, gameSeed: 7,
+        moves: win, outcome: .win(.second))
+      for index in win.indices where index.isMultiple(of: 2) == false {
+        guard let before = try? Board(moves: win.prefix(index)) else { continue }
+        let context = TurnContext(
+          board: before, style: .deepThink, profile: .profile(for: .hard), gameSeed: 7)
+        let prompt = PromptBuilder.build(for: context)
+        var logits = Board.allColumns.map { 0.8 - Double(abs($0 - 3)) * 0.4 }
+        logits[win[index]] += 2.2
+        let distribution = ColumnDistribution.softmax(
+          logits: logits, allowed: prompt.allowedColumns)
+        let move = AIMove(
+          column: win[index], distribution: distribution,
+          thinking:
+            "Let me read the board. The last move was column \(win[index - 1] + 1). I want a move that keeps my lines open and does not hand X a square. Column \(win[index] + 1) looks best.",
+          reasoning:
+            index == win.count - 1
+            ? winReasoning
+            : "Column \(win[index] + 1) builds toward my diagonal and gives X nothing on the row above.",
+          source: index == 5 ? .modelAfterSelfCheck : .model,
+          timings: MoveTimings(
+            prefillMs: 52, timeToFirstTokenMs: 71, decodeTokensPerSecond: 41,
+            totalMs: 2400 + Double(index) * 90, generatedTokens: 84, prefixCacheHit: true))
+        record.traces.append(
+          MoveTrace(
+            context: context, provider: record.opponentName, modelID: record.modelID,
+            prompt: prompt, move: move))
+      }
+      return record
     }
 
     static let midgameReasoning =
