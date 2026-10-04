@@ -1,0 +1,43 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6]) ===
+Columns (bottom → top):
+1: X O O X O → lands row 6
+2: O X → lands row 3
+3: X O X → lands row 4
+4: X X → lands row 3
+5: O O O X → lands row 5
+6: O X → lands row 3
+7: O O X X X O → full
+
+Moves so far: O2 X1 O5 X3 O7 X4 O7 X2 O3 X7 O5 X7 O6 X7 O1 X4 O5 X6 O7 X5 O1 X1 O1 X3 (24 total)
+Legal columns: 1 2 3 4 5 6
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6]) ===
+Columns (bottom → top):
+1: X O O X O → lands row 6
+2: O X → lands row 3
+3: X O X → lands row 4
+4: X X → lands row 3
+5: O O O X → lands row 5
+6: O X → lands row 3
+7: O O X X X O → full
+
+Moves so far: O2 X1 O5 X3 O7 X4 O7 X2 O3 X7 O5 X7 O6 X7 O1 X4 O5 X6 O7 X5 O1 X1 O1 X3 (24 total)
+Facts: none
+Legal columns: 1 2 3 4 5 6
+
+=== hard (allowed: [1, 2, 3, 5, 6]) ===
+Columns (bottom → top):
+1: X O O X O → lands row 6
+2: O X → lands row 3
+3: X O X → lands row 4
+4: X X → lands row 3
+5: O O O X → lands row 5
+6: O X → lands row 3
+7: O O X X X O → full
+
+Moves so far: O2 X1 O5 X3 O7 X4 O7 X2 O3 X7 O5 X7 O6 X7 O1 X4 O5 X6 O7 X5 O1 X1 O1 X3 (24 total)
+Facts:
+- Playing column 4 lets X win immediately.
+- Column 3 would create a new winning threat for you.
+- Column 4 would create a new winning threat for you.
+Legal columns: 1 2 3 5 6

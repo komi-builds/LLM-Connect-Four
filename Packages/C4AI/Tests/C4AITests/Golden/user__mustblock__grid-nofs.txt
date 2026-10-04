@@ -1,0 +1,48 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Moves so far: X4 O1 X4 O2 X4 (5 total)
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Moves so far: X4 O1 X4 O2 X4 (5 total)
+Facts:
+- X threatens to win in column 4. You must block unless you can win first.
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [4]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Moves so far: X4 O1 X4 O2 X4 (5 total)
+Facts:
+- X threatens to win in column 4. You must block unless you can win first.
+- Playing column 1 lets X win immediately.
+- Playing column 2 lets X win immediately.
+- Playing column 3 lets X win immediately.
+- Playing column 5 lets X win immediately.
+- Playing column 6 lets X win immediately.
+- Playing column 7 lets X win immediately.
+Legal columns: 4

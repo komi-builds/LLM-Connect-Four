@@ -1,0 +1,53 @@
+You are an expert Connect Four player. You are O. Your opponent is X.
+The board has 7 columns (1-7, left to right) and 6 rows (1 = bottom, 6 = top).
+A disc dropped in a column lands on the lowest empty row. Four in a row
+horizontally, vertically or diagonally wins.
+Priorities: 1) win now  2) block the opponent's win  3) do not give the
+opponent a winning square  4) build threats, prefer the centre columns.
+Answer with only a line "Column: N". Do not explain.
+
+Example 1
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Columns (bottom → top):
+1: O → lands row 2
+2: O → lands row 2
+3: empty → lands row 1
+4: X X X → lands row 4
+5: empty → lands row 1
+6: empty → lands row 1
+7: empty → lands row 1
+
+Legal columns: 1 2 3 4 5 6 7
+Your answer:
+Column: 4
+
+Example 2
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Columns (bottom → top):
+1: empty → lands row 1
+2: O → lands row 2
+3: O → lands row 2
+4: O → lands row 2
+5: X → lands row 2
+6: X X → lands row 3
+7: empty → lands row 1
+
+Legal columns: 1 2 3 4 5 6 7
+Your answer:
+Column: 1

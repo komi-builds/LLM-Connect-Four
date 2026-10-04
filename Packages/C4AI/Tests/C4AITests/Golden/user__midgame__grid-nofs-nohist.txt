@@ -1,0 +1,39 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Facts: none
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . X . . .
+3  . . X X X . .
+2  . . O O O . .
+1  . . X X O . O
+
+Facts:
+- Column 2 would create a new winning threat for you.
+- Column 6 would create a new winning threat for you.
+Legal columns: 1 2 3 4 5 6 7

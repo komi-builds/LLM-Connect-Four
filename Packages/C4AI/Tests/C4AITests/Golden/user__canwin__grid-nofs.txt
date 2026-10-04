@@ -1,0 +1,42 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Moves so far: O2 X5 O3 X6 O4 X6 (6 total)
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Moves so far: O2 X5 O3 X6 O4 X6 (6 total)
+Facts:
+- You can win immediately in column 1.
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . . . . .
+2  . . . . . X .
+1  . O O O X X .
+
+Moves so far: O2 X5 O3 X6 O4 X6 (6 total)
+Facts:
+- You can win immediately in column 1.
+Legal columns: 1 2 3 4 5 6 7

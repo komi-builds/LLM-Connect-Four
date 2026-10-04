@@ -1,0 +1,72 @@
+=== easy (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Columns (bottom → top):
+1: O → lands row 2
+2: O → lands row 2
+3: empty → lands row 1
+4: X X X → lands row 4
+5: empty → lands row 1
+6: empty → lands row 1
+7: empty → lands row 1
+
+Legal columns: 1 2 3 4 5 6 7
+
+=== moderate (allowed: [1, 2, 3, 4, 5, 6, 7]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Columns (bottom → top):
+1: O → lands row 2
+2: O → lands row 2
+3: empty → lands row 1
+4: X X X → lands row 4
+5: empty → lands row 1
+6: empty → lands row 1
+7: empty → lands row 1
+
+Facts:
+- X threatens to win in column 4. You must block unless you can win first.
+Legal columns: 1 2 3 4 5 6 7
+
+=== hard (allowed: [4]) ===
+Board (row 6 at top):
+   1 2 3 4 5 6 7
+6  . . . . . . .
+5  . . . . . . .
+4  . . . . . . .
+3  . . . X . . .
+2  . . . X . . .
+1  O O . X . . .
+
+Columns (bottom → top):
+1: O → lands row 2
+2: O → lands row 2
+3: empty → lands row 1
+4: X X X → lands row 4
+5: empty → lands row 1
+6: empty → lands row 1
+7: empty → lands row 1
+
+Facts:
+- X threatens to win in column 4. You must block unless you can win first.
+- Playing column 1 lets X win immediately.
+- Playing column 2 lets X win immediately.
+- Playing column 3 lets X win immediately.
+- Playing column 5 lets X win immediately.
+- Playing column 6 lets X win immediately.
+- Playing column 7 lets X win immediately.
+Legal columns: 4
