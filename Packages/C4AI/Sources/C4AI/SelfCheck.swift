@@ -1,10 +1,7 @@
-import C4AI
 import C4Core
 import Foundation
 
-/// The Hard-mode self-check (§3.5). Lives in C4Bench for now so that the bench could ship
-/// without touching C4AI; it only depends on C4AI and C4Core, so it should move to C4AI so
-/// the app's game loop can use the same code.
+/// The Hard-mode self-check (§3.5), shared by the app's game loop and the bench.
 public enum SelfCheck {
   public struct Outcome: Sendable {
     /// The move that stands. After a self-check it is the second answer with source
@@ -48,9 +45,12 @@ public enum SelfCheck {
     else {
       return Outcome(move: first.move, prompt: first.prompt, selfChecked: false)
     }
+    // Facts the prompt already states (Hard lists wins and blocks) are not repeated.
+    let stated = Set(PromptFacts.compute(board: context.board, level: context.profile.facts))
+    let added = facts(for: blunder, board: context.board, played: first.move.column)
+      .filter { !stated.contains($0) }
     var second = context
-    second.extraFacts =
-      context.extraFacts + facts(for: blunder, board: context.board, played: first.move.column)
+    second.extraFacts = context.extraFacts + added
     guard let again = await drain(provider, second, onEvent) else { return nil }
     var move = again.move
     if move.source == .model { move.source = .modelAfterSelfCheck }
