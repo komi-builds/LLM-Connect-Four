@@ -52,14 +52,23 @@
         let delay = UserDefaults.standard.double(forKey: "demoSnapshotDelay")
         try? await Task.sleep(for: .seconds(delay > 0 ? delay : 2.5))
         snapshot(named: name)
+        // A sheet can hold off a polite quit, so do not wait for it.
+        Task {
+          try? await Task.sleep(for: .seconds(1))
+          exit(0)
+        }
         NSApp.terminate(nil)
       }
     }
 
     private static func snapshot(named name: String) {
-      guard let window = NSApp.windows.first(where: { $0.isVisible && $0.canBecomeMain }) else {
-        return
-      }
+      let leaderboard =
+        DemoLeaderboard.isEnabled
+        ? NSApp.windows.first { $0.isVisible && $0.title == "Leaderboard" } : nil
+      guard
+        let window = leaderboard
+          ?? NSApp.windows.first(where: { $0.isVisible && $0.canBecomeMain })
+      else { return }
       let url = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(name)
       capture(window, to: url)
       // A sheet (replay, prompt inspector) is its own window: save it beside the main one.

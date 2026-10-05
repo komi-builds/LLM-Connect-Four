@@ -31,6 +31,7 @@ struct LLMConnectFourApp: App {
         .frame(minWidth: DesignTokens.Window.minWidth, minHeight: DesignTokens.Window.minHeight)
         #if DEBUG
           .onAppear { DemoPositions.windowAppeared() }
+          .modifier(DemoOpenLeaderboard())
         #endif
     }
     .defaultSize(width: 1240, height: 820)
@@ -38,9 +39,9 @@ struct LLMConnectFourApp: App {
     .commands { GameCommands(game: game) }
 
     Window("Leaderboard", id: "leaderboard") {
-      Text("Leaderboard")
-        .frame(minWidth: 720, minHeight: 420)
+      LeaderboardView()
     }
+    .defaultSize(width: 1360, height: 720)
 
     Settings {
       SettingsView(game: game)

@@ -74,6 +74,7 @@ targets:
       - target: LLMConnectFour
       - package: C4Core
       - package: C4AI
+      - package: C4Bench
 
   c4bench:
     type: tool
