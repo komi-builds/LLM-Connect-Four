@@ -40,17 +40,9 @@ public enum SelfCheck {
     onEvent: (@Sendable (TurnEvent) -> Void)? = nil
   ) async -> Outcome? {
     guard let first = await drain(provider, context, onEvent) else { return nil }
-    guard context.profile.selfCheck, first.move.source == .model,
-      let blunder = Tactics.blunder(on: context.board, played: first.move.column)
-    else {
+    guard let (second, blunder) = recheck(after: first.move, context: context) else {
       return Outcome(move: first.move, prompt: first.prompt, selfChecked: false)
     }
-    // Facts the prompt already states (Hard lists wins and blocks) are not repeated.
-    let stated = Set(PromptFacts.compute(board: context.board, level: context.profile.facts))
-    let added = facts(for: blunder, board: context.board, played: first.move.column)
-      .filter { !stated.contains($0) }
-    var second = context
-    second.extraFacts = context.extraFacts + added
     guard let again = await drain(provider, second, onEvent) else { return nil }
     var move = again.move
     if move.source == .model { move.source = .modelAfterSelfCheck }
@@ -60,6 +52,21 @@ public enum SelfCheck {
     return Outcome(
       move: move, prompt: again.prompt ?? first.prompt, selfChecked: true, firstMove: first.move,
       blunder: blunder)
+  }
+
+  /// The re-prompt context if `move` should be self-checked: the profile asks for it, the
+  /// move is the model's own first answer, and it missed an immediate win or block. Facts
+  /// the prompt already states are not repeated.
+  public static func recheck(after move: AIMove, context: TurnContext) -> (TurnContext, Blunder)? {
+    guard context.profile.selfCheck, move.source == .model,
+      let blunder = Tactics.blunder(on: context.board, played: move.column)
+    else { return nil }
+    let stated = Set(PromptFacts.compute(board: context.board, level: context.profile.facts))
+    let added = facts(for: blunder, board: context.board, played: move.column)
+      .filter { !stated.contains($0) }
+    var second = context
+    second.extraFacts = context.extraFacts + added
+    return (second, blunder)
   }
 
   private static func drain(

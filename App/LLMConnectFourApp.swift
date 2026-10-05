@@ -1,5 +1,6 @@
 import AppKit
 import C4AI
+import C4MLX
 import SwiftUI
 
 @main
@@ -8,7 +9,15 @@ struct LLMConnectFourApp: App {
   @State private var game: GameViewModel
 
   init() {
-    let game = GameViewModel()
+    // `-mockModel YES` (or any demo position) plays against the mock instead of loading an
+    // LLM, for demos and screenshots.
+    let defaults = UserDefaults.standard
+    let useMock =
+      defaults.bool(forKey: "mockModel") || defaults.string(forKey: "demoPosition") != nil
+    let game = GameViewModel(providerFactory: { spec -> any MoveProvider in
+      if useMock { return MockMoveProvider(name: spec.name) }
+      return LLMMoveProvider(spec: spec)
+    })
     game.gameStore = .default
     #if DEBUG
       DemoPositions.applyLaunchArguments(to: game)
@@ -34,8 +43,7 @@ struct LLMConnectFourApp: App {
     }
 
     Settings {
-      Text("Settings")
-        .frame(width: 480, height: 320)
+      SettingsView(game: game)
     }
   }
 }
