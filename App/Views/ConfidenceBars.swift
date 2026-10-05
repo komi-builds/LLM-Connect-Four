@@ -85,7 +85,7 @@ struct ConfidenceBars: View {
 
   private func label(column: Column, masked: Bool) -> String {
     if masked { return "·" }
-    guard distribution != nil else { return "–" }
+    guard distribution != nil else { return "-" }
     return "\(Int((probabilities[column] * 100).rounded()))"
   }
 

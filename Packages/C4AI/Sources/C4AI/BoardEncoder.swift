@@ -3,7 +3,7 @@ import C4Core
 /// Turns a board into text the model can read without doing perception work (§3.1).
 ///
 /// Rules: fixed perspective (the side to move is `O`, the opponent `X`), only `X`, `O` and
-/// `.` separated by spaces, columns 1–7, rows 1 (bottom) to 6 (top) printed top-down, and
+/// `.` separated by spaces, columns 1 to 7, rows 1 (bottom) to 6 (top) printed top-down, and
 /// pre-computed landing rows. This is the only place 0-based columns become 1-based.
 public enum BoardEncoder {
   /// The 6×7 grid with a column header, as in §3.1.
