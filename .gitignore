@@ -18,5 +18,5 @@ Package.resolved.bak
 *.log
 /bench-output/
 
-# Claude Code agent worktrees and local settings
+# Local tool settings
 .claude/

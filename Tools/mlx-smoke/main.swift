@@ -4,7 +4,7 @@ import C4MLX
 import Foundation
 
 // mlx-smoke: loads a real model and plays Instinct and Explain moves on fixed boards
-// (agent D's done-when check). Prints digit tokens, distributions, reasoning, the
+// to check a model end to end. Prints digit tokens, distributions, reasoning, the
 // unmasked-legality flag and timings.
 //
 //   mlx-smoke [--model <hf id>] [--directory <local folder>] [--deep] [--skip-reload]

@@ -1,4 +1,4 @@
-# MLX findings (agent D)
+# MLX findings
 
 What the real `mlx-swift-lm` 3.32.3 API looks like, how `C4MLX` uses it, and measured
 numbers that replace the estimates in plan §3.2. Machine: M3 Pro, 18 GB, macOS 27,
@@ -93,11 +93,10 @@ Qwen3 1.7B 4-bit (`mlx-community/Qwen3-1.7B-4bit`, `thinking: true`):
 
 Decode is memory-bandwidth bound (about 41 tok/s for 2.3 GB means about 95 GB/s effective). Prefill is compute bound (about 490 tok/s on the 4B), so the static-prefix cache saves about 400 ms per move and the per-turn prompt length matters: each 100 tokens of board text cost about 200 ms per move.
 
-## Observations for other agents
+## Observations
 
-- **Explain quality depends on brevity.** With a system prompt that says "one short sentence (at most 25 words)", 3 of 4 Explain moves finished on their own in 32 to 44 tokens and wrote `Column:` themselves. With a vaguer prompt the model wrote a "Facts:" paragraph, hit the 64-token cap mid-thought, and in 2 of 4 cases the forced answer was **column 1 with 99% confidence** (an "enumeration" continuation such as `Row 6: …`), including a missed immediate win. The same thing happens after Deep think when the reasoning is cut. Agent B: ask for one short sentence. Lead: consider a soft landing (allow about 16 extra tokens to finish the sentence) if the bench shows budget-hit moves are worse.
+- **Explain quality depends on brevity.** With a system prompt that says "one short sentence (at most 25 words)", 3 of 4 Explain moves finished on their own in 32 to 44 tokens and wrote `Column:` themselves. With a vaguer prompt the model wrote a "Facts:" paragraph, hit the 64-token cap mid-thought, and in 2 of 4 cases the forced answer was **column 1 with 99% confidence** (an "enumeration" continuation such as `Row 6: …`), including a missed immediate win. The same thing happens after Deep think when the reasoning is cut. Prompt v2 therefore asks for one short sentence. A soft landing (about 16 extra tokens to finish the sentence) is an option if the benchmark shows budget-hit moves are worse.
 - **Prefixes depend on style**, so the first Instinct move after a warm-up done for Explain pays a prefix miss (+400 ms). The app should call `provider.prepare(for:)` with the current style and variant after load and whenever they change.
-- The default `promptBuilder` runs during `load()` (warm-up), so `load()` crashes while `PromptBuilder.build` / `DifficultyProfile.allowedColumns` are still `fatalError` stubs. That is fine once agent B's code is merged.
 - Hard Instinct is deterministic: the same board twice gives the same column and an identical distribution.
 - `unmaskedTopChoiceLegal` was `true` on every test board, including the full-centre-column board: Qwen3 4B never preferred the full column, so the mask didn't change any of these moves.
 
