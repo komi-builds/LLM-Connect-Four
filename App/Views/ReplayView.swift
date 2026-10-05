@@ -9,15 +9,21 @@ struct ReplayView: View {
   var record: GameRecord
   /// Show the Done button (when presented as a sheet).
   var showsDone = true
+  /// Titles and mover names for benchmark games (both sides are contestants). Nil for a
+  /// game played in the app.
+  var labels: ReplayLabels?
 
   @State private var state: ReplayState
   @State private var exportDocument: GameDocument?
   @State private var isExporting = false
   @Environment(\.dismiss) private var dismiss
 
-  init(record: GameRecord, showsDone: Bool = true, initialPly: Int = 0) {
+  init(
+    record: GameRecord, showsDone: Bool = true, labels: ReplayLabels? = nil, initialPly: Int = 0
+  ) {
     self.record = record
     self.showsDone = showsDone
+    self.labels = labels
     _state = State(initialValue: ReplayState(record: record, ply: initialPly))
   }
 
@@ -60,8 +66,8 @@ struct ReplayView: View {
   private var header: some View {
     HStack(alignment: .firstTextBaseline, spacing: DesignTokens.Spacing.m) {
       VStack(alignment: .leading, spacing: 2) {
-        Text(record.resultTitle).font(.title3.weight(.semibold))
-        Text(record.summaryLine)
+        Text(labels?.title ?? record.resultTitle).font(.title3.weight(.semibold))
+        Text(labels?.subtitle ?? record.summaryLine)
           .font(.caption)
           .foregroundStyle(.secondary)
       }
@@ -122,7 +128,8 @@ struct ReplayView: View {
       return String(localized: "Start of the game · use the left and right arrow keys")
     }
     let who =
-      state.isHumanMove(at: index) ? String(localized: "You") : record.opponentName
+      labels?.movers[index]
+      ?? (state.isHumanMove(at: index) ? String(localized: "You") : record.opponentName)
     return String(
       localized: "Move \(state.ply) of \(state.plyCount) · \(who) played column \(column + 1)")
   }
