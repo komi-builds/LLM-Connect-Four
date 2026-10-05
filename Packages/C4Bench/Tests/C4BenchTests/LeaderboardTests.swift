@@ -100,13 +100,15 @@ import Testing
     #expect(rows.map(\.rank) == [1, 2, 3, 4])
     #expect(rows.map(\.rating) == rows.map(\.rating).sorted(by: >))
     #expect(rows.first { $0.contestant.id == "minimax-d2" }?.rating == 1000)
+    var leader: RatingRow?
     for (index, row) in rows.enumerated() {
       #expect(row.ciLow <= row.rating && row.rating <= row.ciHigh)
       if index == 0 {
         #expect(!row.tiedWithPrevious)
       } else {
-        #expect(row.tiedWithPrevious == (row.ciHigh >= rows[index - 1].ciLow))
+        #expect(row.tiedWithPrevious == (row.ciHigh >= leader!.ciLow))
       }
+      if !row.tiedWithPrevious { leader = row }
     }
     let xr = try #require(rows.first { $0.contestant.id == x.id })
     #expect(xr.games == 4 && xr.wins == 2 && xr.draws == 1 && xr.losses == 1)

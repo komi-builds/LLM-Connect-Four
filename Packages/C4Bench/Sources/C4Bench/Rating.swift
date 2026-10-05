@@ -115,7 +115,8 @@ public struct RatingRow: Sendable, Hashable, Codable, Identifiable {
   public var rating: Double
   public var ciLow: Double
   public var ciHigh: Double
-  /// True if this row's interval overlaps the row above it.
+  /// True if this row's interval overlaps the first row of the tie group above it, so it
+  /// shares that row's rank.
   public var tiedWithPrevious: Bool
   public var games: Int
   public var wins: Int

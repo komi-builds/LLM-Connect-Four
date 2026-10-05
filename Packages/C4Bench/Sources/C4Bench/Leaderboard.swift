@@ -96,6 +96,10 @@ public enum Leaderboard {
       return r0 != r1 ? r0 > r1 : $0.id < $1.id
     }
     var rows: [RatingRow] = []
+    // A tie group starts at a row and takes every following row whose interval overlaps
+    // the group's first row. Comparing with the group's leader (not just the row above)
+    // keeps a chain of small overlaps from tying the top of the table with the bottom.
+    var groupLeader: RatingRow?
     for (position, contestant) in ordered.enumerated() {
       let id = contestant.id
       let rating = ratings[id] ?? 1000
@@ -105,8 +109,10 @@ public enum Leaderboard {
         contestant: contestant, rank: position + 1, rating: rating, ciLow: interval.lowerBound,
         ciHigh: interval.upperBound, games: games, wins: wins[id] ?? 0, draws: draws[id] ?? 0,
         losses: losses[id] ?? 0)
-      if let previous = rows.last {
-        row.tiedWithPrevious = row.ciHigh >= previous.ciLow
+      if let leader = groupLeader, row.ciHigh >= leader.ciLow {
+        row.tiedWithPrevious = true
+      } else {
+        groupLeader = row
       }
       if let entry = vsD4[id], entry.games > 0 {
         row.winRateVsD4 = entry.points / Double(entry.games)
