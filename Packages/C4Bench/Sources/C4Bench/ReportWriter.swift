@@ -59,7 +59,7 @@ public enum ReportWriter {
       footer += "all machines; prompt version n/a"
     }
     footer +=
-      ". Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks a tie with the row above."
+      ". Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks rows whose intervals overlap, which share a rank."
     lines.append(footer)
     return lines.joined(separator: "\n") + "\n"
   }

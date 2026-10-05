@@ -120,7 +120,7 @@ struct LeaderboardView: View {
   private var footerText: String {
     let machine = model.selectedMachine?.label ?? String(localized: "all machines")
     return String(localized: "Speed columns: \(machine). Ratings use all games, Minimax d2 = 1000.")
-      + " " + String(localized: "= marks a tie with the row above.")
+      + " " + String(localized: "= marks rows whose intervals overlap, which share a rank.")
   }
 
   // MARK: Table

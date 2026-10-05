@@ -7,4 +7,4 @@
 | 5 | Gemma 2B · Instinct · Moderate · columns | 802 ± 45 | n/a | n/a | n/a | 55.0 | n/a | n/a | n/a | n/a | n/a |
 | 6 | Random | 450 ± 70 | n/a | n/a | 3.25 | n/a | n/a | n/a | n/a | n/a | n/a |
 
-Speed columns: all machines; prompt version n/a. Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks a tie with the row above.
+Speed columns: all machines; prompt version n/a. Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks rows whose intervals overlap, which share a rank.

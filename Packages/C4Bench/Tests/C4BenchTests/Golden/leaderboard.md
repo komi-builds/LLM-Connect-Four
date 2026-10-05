@@ -7,4 +7,4 @@
 | 5 | Gemma 2B · Instinct · Moderate · columns | 802 ± 45 | n/a | n/a | n/a | 55.0 | n/a | n/a | n/a | n/a | n/a |
 | 6 | Random | 450 ± 70 | n/a | n/a | 3.25 | n/a | n/a | n/a | n/a | n/a | n/a |
 
-Speed columns: Apple M3 Pro · 18 GB; prompt version 3. Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks a tie with the row above.
+Speed columns: Apple M3 Pro · 18 GB; prompt version 3. Ratings: Bradley-Terry, Minimax d2 = 1000, 95% bootstrap CI; = marks rows whose intervals overlap, which share a rank.
