@@ -23,7 +23,7 @@ all_models=(
   mlx-community/Qwen3-4B-Instruct-2507-4bit
   mlx-community/Qwen3-1.7B-4bit
   mlx-community/Llama-3.2-3B-Instruct-4bit
-  mlx-community/gemma-3-4b-it-4bit
+  mlx-community/gemma-3-text-4b-it-4bit
   mlx-community/Qwen3.5-4B-4bit
   mlx-community/Qwen3-4B-Thinking-2507-4bit
   mlx-community/Qwen3-8B-4bit

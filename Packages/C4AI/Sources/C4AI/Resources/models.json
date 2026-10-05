@@ -8,9 +8,10 @@
     "chatTemplateArgs": { "enable_thinking": "$deepThink" } },
   { "id": "mlx-community/Qwen3-8B-4bit", "name": "Qwen3 8B", "sizeGB": 4.6, "thinking": true,
     "thinkTags": ["<think>", "</think>"], "chatTemplateArgs": { "enable_thinking": "$deepThink" } },
-  { "id": "mlx-community/gemma-3-4b-it-4bit", "name": "Gemma 3 4B", "sizeGB": 3.4, "thinking": false,
-    "notes": "loads text-only; vision weights still downloaded" },
+  { "id": "mlx-community/gemma-3-text-4b-it-4bit", "name": "Gemma 3 4B", "sizeGB": 2.6, "thinking": false,
+    "notes": "text-only conversion; the multimodal repo does not load with MLXLLM" },
   { "id": "mlx-community/Llama-3.2-3B-Instruct-4bit", "name": "Llama 3.2 3B", "sizeGB": 1.8, "thinking": false },
   { "id": "mlx-community/Qwen3.5-4B-4bit", "name": "Qwen3.5 4B", "sizeGB": 3.1, "thinking": true,
-    "notes": "newer; benchmark against Qwen3 4B" }
+    "thinkTags": ["<think>", "</think>"], "chatTemplateArgs": { "enable_thinking": "$deepThink" },
+    "notes": "newer; thinks by default, so thinking is switched off outside Deep think" }
 ]
